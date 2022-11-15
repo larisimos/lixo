@@ -1,0 +1,197 @@
+<!DOCTYPE>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>JOGO DA COBRINHA</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+	<div class="fundo" id="fundo">
+		<div id="div2">
+			<img alt="maçã" src="./img/maçã.jpg">
+		</div>
+		<div id="div1">
+			<img alt="cobrinha" src="./img/cobrinha.jpg">
+		</div>
+	</div>
+	<div class="iniciar">
+		<img alt="maçã" src="./img/iniciar.jpg">
+		<button type="button" id="jogar"></button>
+		<button type="button" id="olhar"> </button>
+	</div>
+	<div id="instruções" class="instruções">
+		<img id="a" alt="maçã" src="./img/iniciar.jpg">
+
+	</div>
+	<div class="alertmorreu">
+		<img alt="Cobra morta" src="./img/morreu.jpg">
+		<button type="button"></button>
+	</div>
+		<div class="painel">
+
+
+			<button type="button" id="acima"><img alt="cima" src="./img/cima.png"></button><br>
+			<button type="button" id="esquerda"><img alt="esquerda" src="./img/esquerda.png"></button>
+			<button type="button" id="direita"><img alt="direita" src="./img/direita.png"></button><br>
+			<button type="button" id="baixo"><img alt="baixo" src="./img/baixo.png"></button>
+
+		</div>
+	</div>
+
+	<script>
+		//abre e fecha as instruções no iniciar
+		function abrir() {
+				document.getElementById('instruções').style.display = 'block';
+		}
+			function fechar() {
+				document.getElementById('instruções').style.display = 'none';
+			}
+		
+		// Mover cursor 1  - através dos botões
+		function move(Direcao) {
+			if (contador != 0) {
+				para();
+			}
+			if (Direcao == "direita") {
+				timer = setInterval("direita()", 60);
+				contador++;
+			}
+
+			if (Direcao == "esquerda") {
+				timer = setInterval("esquerda()", 60);
+				contador++;
+			}
+
+			if (Direcao == "acima") {
+				timer = setInterval("acima()", 60);
+				contador++;
+			}
+
+			if (Direcao == "baixo") {
+				timer = setInterval("baixo()", 60);
+				contador++;
+			}
+		} //timer= cobrinha(div 1) 
+		function direita() {
+			let div1Left = parseInt(getComputedStyle(div1).left);
+			let fundoWidth = parseInt(getComputedStyle(fundo).width);
+			let div1Width = parseInt(getComputedStyle(div1).width);
+
+			div1.style.left = div1Left + 5;
+			if (div1Left >= fundoWidth - div1Width) {
+				para();
+				fail.play();
+				alert("Você matou a Gertrudes :(\n sua pontuação final foi de: " + pontos + "\n Por favor, reinicie a página.");
+
+			}
+		}
+
+		function esquerda() {
+			let div1Left = parseInt(getComputedStyle(div1).left);
+
+			div1.style.left = div1Left - 5;
+			if (div1Left <= 0) {
+				para();
+				fail.play();
+				alert("Você matou a Gertrudes :(\n sua pontuação final foi de: " + pontos + "\n Por favor, reinicie a página.");
+			}
+		}
+
+		function baixo() {
+			let div1Top = parseInt(getComputedStyle(div1).top);
+			let fundoHeight = parseInt(getComputedStyle(fundo).height);
+			let div1Height = parseInt(getComputedStyle(div1).height);
+
+			div1.style.top = div1Top + 5;
+			if (div1Top >= fundoHeight - div1Height) {
+				para();
+				fail.play();
+				alert("Você matou a Gertrudes :(\n sua pontuação final foi de: " + pontos + "\n Por favor, reinicie a página.");
+			}
+		}
+		function acima() {
+			let div1Top = parseInt(getComputedStyle(div1).top);
+
+			div1.style.top = div1Top - 5;
+			if (div1Top <= 0) {
+				para();
+				fail.play();
+				alert("Você matou a Gertrudes :(\n sua pontuação final foi de: " + pontos + "\n Por favor, reinicie a página.");
+			}
+		}
+		// Parar cursores
+
+		function para() {
+			clearInterval(timer);
+		}
+		// some maçã
+		function sumir() {
+			fundo.removeChild(div2);
+			mordida.play();
+
+		}
+		// aparece maçã
+		function criar() {
+			latitude = parseInt(getComputedStyle(fundo).height);
+			longitude = parseInt(getComputedStyle(fundo).width);
+			Novamaça = document.createElement("div");
+			Novamaça.setAttribute("id", "div2");
+			fundo.appendChild(Novamaça);
+			Novamaça.style.top = Math.floor(Math.random() * latitude);
+			Novamaça.style.left = Math.floor(Math.random() * longitude);
+			Maçaimg = document.createElement("img");
+			Maçaimg.setAttribute("src", "./img/maçã.jpg")
+			Maçaimg.setAttribute("alt", "maçã")
+			Novamaça.appendChild(Maçaimg);
+			pontos += 10
+
+
+
+		}
+
+
+
+		function altura(parametro) {
+			div1.style.height = parseInt(getComputedStyle(div1).height) + parametro;
+		}
+
+		function largura(parametro) {
+			div1.style.width = parseInt(getComputedStyle(div1).width) + parametro;
+		}
+
+
+		function colisao() {
+			if (((parseInt(getComputedStyle(div1).left) >= parseInt(getComputedStyle(div2).left)) && (parseInt(getComputedStyle(div1).left) <= parseInt(getComputedStyle(div2).left) + 50)) &&
+				((parseInt(getComputedStyle(div1).top) >= parseInt(getComputedStyle(div2).top)) && (parseInt(getComputedStyle(div1).top) <= parseInt(getComputedStyle(div2).top) + 50))) {
+				sumir();
+				criar();
+			}
+			if (((parseInt(getComputedStyle(div2).left) >= parseInt(getComputedStyle(div1).left)) && (parseInt(getComputedStyle(div2).left) <= parseInt(getComputedStyle(div1).left) + 50)) &&
+				((parseInt(getComputedStyle(div2).top) >= parseInt(getComputedStyle(div1).top)) && (parseInt(getComputedStyle(div2).top) <= parseInt(getComputedStyle(div1).top) + 50))) {
+				sumir();
+				criar();
+			}
+		}
+
+
+		//Ao carregar a página estas linhas são executadas. Funções que são chamadas a cada 15 e 5 milisegundos
+		let contador = 0;
+		let pontos = 0;
+		let cont = 0;
+		let n = setInterval("colisao()", 5);
+		const mordida = new Audio("sons/mordidafoda_.mp3");
+		const fail = new Audio("sons/fail.mp3")
+
+		document.querySelector("#acima").addEventListener("click", () => { move('acima') });
+		document.querySelector("#esquerda").addEventListener("click", () => { move('esquerda') });
+		document.querySelector("#direita").addEventListener("click", () => { move('direita') });
+		document.querySelector("#baixo").addEventListener("click", () => { move('baixo') });
+		document.querySelector("#acima").addEventListener("click", () => { move('acima') });
+
+	</script>
+</body>
+
+</html>
